@@ -1,27 +1,14 @@
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_chroma import Chroma
+from langchain_qdrant import QdrantVectorStore
+from qdrant_client import QdrantClient
+from qdrant_client.models import Distance, VectorParams
 from rag.embeddings import get_embeddings
-import shutil
-import os
-import chromadb
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VECTORSTORE_PATH = os.path.join(BASE_DIR, "vectorstore")
-
+COLLECTION = "researchforge"
+client = QdrantClient(host="localhost", port=6333)
 
 def ingest_pdf(pdf_path: str):
-    # Reset any open ChromaDB client before deleting the folder
-    if os.path.exists(VECTORSTORE_PATH):
-        try:
-            client = chromadb.PersistentClient(path=VECTORSTORE_PATH)
-            for col in client.list_collections():
-                client.delete_collection(col.name)
-            del client
-        except Exception:
-            pass
-        shutil.rmtree(VECTORSTORE_PATH)
-
     print(f"Loading PDF: {pdf_path}")
     loader = PyPDFLoader(pdf_path)
     docs = loader.load()
@@ -29,28 +16,30 @@ def ingest_pdf(pdf_path: str):
 
     docs = [doc for doc in docs if doc.page_content.strip()]
     if not docs:
-        raise ValueError(
-            "This PDF has no extractable text. It may be a scanned image. "
-            "Please upload a text-based PDF."
-        )
+        raise ValueError("This PDF has no extractable text.")
 
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=200,
-    )
+    splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     chunks = splitter.split_documents(docs)
     print(f"Created {len(chunks)} chunks")
 
     if not chunks:
-        raise ValueError(
-            "PDF was loaded but produced no text chunks. "
-            "The file may be corrupted or contain only images."
-        )
+        raise ValueError("PDF produced no text chunks.")
 
-    Chroma.from_documents(
+    # Delete and recreate collection — Qdrant handles this cleanly
+    if client.collection_exists(COLLECTION):
+        client.delete_collection(COLLECTION)
+        print("Deleted old collection.")
+
+    client.create_collection(
+        collection_name=COLLECTION,
+        vectors_config=VectorParams(size=384, distance=Distance.COSINE),
+    )
+
+    QdrantVectorStore.from_documents(
         documents=chunks,
         embedding=get_embeddings(),
-        persist_directory=VECTORSTORE_PATH,
+        url="http://localhost:6333",
+        collection_name=COLLECTION,
     )
-    print("Vector store saved successfully!")
+    print("Qdrant vector store saved!")
     return len(chunks)

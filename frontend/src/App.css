@@ -534,3 +534,24 @@ html, body, #root {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
  
+/* ── Formatted answer bullets ── */
+.bubble--ai li {
+  padding: 3px 0 3px 14px;
+  position: relative;
+  line-height: 1.7;
+  white-space: normal;
+}
+
+.bubble--ai li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--sienna);
+  font-size: 11px;
+}
+
+.bubble--ai p {
+  margin: 3px 0;
+  line-height: 1.7;
+  white-space: normal;
+}

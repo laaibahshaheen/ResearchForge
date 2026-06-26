@@ -1,20 +1,17 @@
-from langchain_chroma import Chroma
+from langchain_qdrant import QdrantVectorStore
+from qdrant_client import QdrantClient
 from rag.embeddings import get_embeddings
-import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VECTORSTORE_PATH = os.path.join(BASE_DIR, "vectorstore")
-
+COLLECTION = "researchforge"
+client = QdrantClient(host="localhost", port=6333)
 
 def retrieve_docs(query: str, k: int = 3):
-    if not os.path.exists(VECTORSTORE_PATH):
-        raise FileNotFoundError(
-            "No vector store found. Please upload a PDF first."
-        )
+    if not client.collection_exists(COLLECTION):
+        raise FileNotFoundError("No PDF uploaded yet. Please upload a PDF first.")
 
-    db = Chroma(
-        persist_directory=VECTORSTORE_PATH,
-        embedding_function=get_embeddings(),
+    db = QdrantVectorStore(
+        client=client,
+        collection_name=COLLECTION,
+        embedding=get_embeddings(),
     )
-    docs = db.similarity_search(query, k=k)
-    return docs
+    return db.similarity_search(query, k=k)

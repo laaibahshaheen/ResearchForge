@@ -16,8 +16,27 @@ function TypingDots() {
   );
 }
 
+function formatAnswer(text) {
+  return text.split("\n").map((line, i) => {
+    if (line.startsWith("* ") || line.startsWith("- ")) {
+      return <li key={i}>{line.slice(2)}</li>;
+    }
+    if (line.startsWith("## ")) {
+      return <strong key={i} style={{display:"block", marginTop:"10px"}}>{line.slice(3)}</strong>;
+    }
+    if (line.trim() === "") return <br key={i} />;
+    return <p key={i} style={{margin:"2px 0"}}>{line}</p>;
+  });
+}
+
 function ChatMessage({ msg }) {
   const isUser = msg.role === "user";
+  const lines = msg.content !== "__loading__" ? msg.content.split("\n") : [];
+  const pageRefs = lines
+    .join(" ")
+    .match(/\(Page \d+\)/g);
+  const uniquePages = pageRefs ? [...new Set(pageRefs)] : [];
+
   return (
     <div className={`chat-row ${isUser ? "chat-row--user" : "chat-row--ai"}`}>
       <span className="role-label">{isUser ? "You" : "AI"}</span>
@@ -25,13 +44,15 @@ function ChatMessage({ msg }) {
         {msg.content === "__loading__" ? (
           <TypingDots />
         ) : (
-          <p>{msg.content}</p>
+          <ul style={{listStyle:"none", padding:0, margin:0}}>
+            {formatAnswer(msg.content)}
+          </ul>
         )}
-        {msg.sources && msg.sources.length > 0 && (
+        {uniquePages.length > 0 && (
           <div className="sources">
             <span className="sources-label">Sources</span>
-            {msg.sources.map((s, i) => (
-              <span key={i} className="source-chip">{s}</span>
+            {uniquePages.map((p, i) => (
+              <span key={i} className="source-chip">{p}</span>
             ))}
           </div>
         )}
@@ -39,7 +60,6 @@ function ChatMessage({ msg }) {
     </div>
   );
 }
-
 function Sidebar({ pdfs, activePdf, onSelect, onUpload, uploading, uploadStatus }) {
   const fileRef = useRef();
 
