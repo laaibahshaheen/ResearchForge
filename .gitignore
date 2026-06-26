@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+
+# Environment variables — NEVER commit this
+backend/.env
+
+# Vector store — regenerated on upload
+backend/vectorstore/
+
+# Uploaded files
+backend/uploads/
+
+# Node
+frontend/node_modules/
+
+# Vite build
+frontend/dist/
+
+# OS
+.DS_Store
+Thumbs.db

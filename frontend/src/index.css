@@ -1,0 +1,52 @@
+:root {
+  font-family: "Poppins", system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color: #5a3e52;
+  background: linear-gradient(135deg, #ffe4f2, #ffd6eb);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    #ffe4f2 0%,
+    #ffd1e8 50%,
+    #ffc1dd 100%
+  );
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+h1, h2, h3 {
+  color: #d63384;
+}
+
+button {
+  font-family: inherit;
+}
+
+a {
+  color: #d63384;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #b51768;
+}
