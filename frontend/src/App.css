@@ -1,24 +1,11 @@
-
 /* ─────────────────────────────────────────
    ResearchForge — Bauhaus Earth Edition
-   Palette:
-     linen:    #F5F0E8   page background
-     parchment:#EDE8DF   header / input bar
-     charcoal: #1C1A16   sidebar, borders, text
-     sienna:   #A0522D   accent (AI bar, buttons)
-     sand:     #C8A97A   secondary accent
-     moss:     #4A5240   source chips
-     stone:    #8A7D6F   muted text
-     dark-alt: #2E2B24   sidebar dividers
-   Design language: Bauhaus — zero border-radius,
-   2px ruled borders, monospace labels,
-   heavy grid structure, flat colour.
    ───────────────────────────────────────── */
- 
+
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap");
- 
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
 :root {
   --linen:    #F5F0E8;
   --parch:    #EDE8DF;
@@ -32,7 +19,7 @@
   --ok:       #4A5240;
   --err:      #8B3A2A;
 }
- 
+
 html, body, #root {
   height: 100%;
   background: var(--linen);
@@ -42,7 +29,7 @@ html, body, #root {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
- 
+
 /* ── Layout ── */
 .app {
   display: flex;
@@ -50,7 +37,7 @@ html, body, #root {
   overflow: hidden;
   border: 2px solid var(--charcoal);
 }
- 
+
 /* ── Sidebar ── */
 .sidebar {
   width: 240px;
@@ -60,18 +47,18 @@ html, body, #root {
   flex-direction: column;
   border-right: 2px solid var(--charcoal);
 }
- 
+
 .sidebar-head {
   padding: 18px 16px 14px;
   border-bottom: 2px solid var(--divider);
 }
- 
+
 .logo-row {
   display: flex;
   align-items: center;
   gap: 10px;
 }
- 
+
 .logo-sq {
   width: 30px;
   height: 30px;
@@ -80,8 +67,11 @@ html, body, #root {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: background 0.2s;
 }
- 
+
+.logo-sq:hover { background: var(--sand); }
+
 .logo-text {
   font-family: "Space Mono", monospace;
   font-size: 11px;
@@ -91,7 +81,7 @@ html, body, #root {
   text-transform: uppercase;
   line-height: 1.3;
 }
- 
+
 .logo-sub {
   font-family: "Space Mono", monospace;
   font-size: 9px;
@@ -100,7 +90,7 @@ html, body, #root {
   text-transform: uppercase;
   margin-top: 2px;
 }
- 
+
 .sidebar-body {
   padding: 14px 12px;
   display: flex;
@@ -109,7 +99,7 @@ html, body, #root {
   flex: 1;
   overflow: hidden;
 }
- 
+
 /* ── Upload button ── */
 .upload-btn {
   width: 100%;
@@ -127,19 +117,64 @@ html, body, #root {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: background 0.12s, color 0.12s;
+  transition: background 0.12s, color 0.12s, transform 0.1s;
 }
- 
+
 .upload-btn:hover:not(:disabled) {
   background: var(--sienna);
   color: var(--linen);
+  transform: translateY(-1px);
 }
- 
+
+.upload-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
 .upload-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
- 
+
+/* ── Chunk info bar ── */
+.chunk-info {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--divider);
+}
+
+.chunk-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.chunk-label {
+  font-family: "Space Mono", monospace;
+  font-size: 9px;
+  color: var(--stone);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.chunk-val {
+  font-family: "Space Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sand);
+}
+
+.chunk-bar {
+  height: 3px;
+  background: var(--divider);
+  width: 100%;
+}
+
+.chunk-fill {
+  height: 100%;
+  background: var(--sienna);
+  transition: width 0.8s ease;
+}
+
 /* ── Upload status ── */
 .upload-status {
   font-family: "Space Mono", monospace;
@@ -147,11 +182,17 @@ html, body, #root {
   letter-spacing: 0.04em;
   padding: 6px 8px;
   border-left: 3px solid;
+  animation: fadeIn 0.3s ease;
 }
- 
+
 .status--ok  { color: #7AAB8A; border-color: #7AAB8A; }
 .status--err { color: #C07060; border-color: #C07060; }
- 
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ── Section label ── */
 .section-label {
   font-family: "Space Mono", monospace;
@@ -163,7 +204,7 @@ html, body, #root {
   padding: 6px 0 4px;
   border-top: 1px solid var(--divider);
 }
- 
+
 /* ── PDF list ── */
 .pdf-list {
   flex: 1;
@@ -171,10 +212,10 @@ html, body, #root {
   display: flex;
   flex-direction: column;
 }
- 
+
 .pdf-list::-webkit-scrollbar { width: 3px; }
 .pdf-list::-webkit-scrollbar-thumb { background: var(--sienna); }
- 
+
 .pdf-empty {
   font-family: "Space Mono", monospace;
   font-size: 10px;
@@ -182,7 +223,7 @@ html, body, #root {
   line-height: 1.8;
   padding: 12px 0;
 }
- 
+
 .pdf-item {
   display: flex;
   align-items: center;
@@ -199,24 +240,24 @@ html, body, #root {
   text-align: left;
   transition: background 0.1s, color 0.1s, border-color 0.1s;
 }
- 
+
 .pdf-item:hover {
   background: #252118;
   color: var(--sand);
 }
- 
+
 .pdf-item--active {
   background: #252118;
   color: var(--sand);
   border-left-color: var(--sienna);
 }
- 
+
 .pdf-name {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
- 
+
 /* ── Sidebar footer ── */
 .sidebar-foot {
   padding: 12px;
@@ -225,7 +266,7 @@ html, body, #root {
   flex-direction: column;
   gap: 5px;
 }
- 
+
 .model-badge {
   font-family: "Space Mono", monospace;
   font-size: 9px;
@@ -235,8 +276,14 @@ html, body, #root {
   border: 1px solid var(--divider);
   display: inline-block;
   width: fit-content;
+  transition: color 0.15s, border-color 0.15s;
 }
- 
+
+.model-badge:hover {
+  color: var(--sand);
+  border-color: var(--sienna);
+}
+
 /* ── Chat area ── */
 .chat-area {
   flex: 1;
@@ -245,7 +292,7 @@ html, body, #root {
   overflow: hidden;
   background: var(--linen);
 }
- 
+
 /* ── Chat header ── */
 .chat-header {
   display: flex;
@@ -256,14 +303,23 @@ html, body, #root {
   background: var(--parch);
   min-height: 52px;
 }
- 
+
 .status-sq {
   width: 8px;
   height: 8px;
   background: var(--moss);
   flex-shrink: 0;
 }
- 
+
+.status-sq--pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
 .active-name {
   font-family: "Space Mono", monospace;
   font-size: 10px;
@@ -275,14 +331,14 @@ html, body, #root {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
- 
+
 .header-hint {
   font-family: "Space Mono", monospace;
   font-size: 10px;
   color: var(--stone);
   letter-spacing: 0.04em;
 }
- 
+
 /* ── Clear chat button ── */
 .clear-btn {
   margin-left: auto;
@@ -306,7 +362,7 @@ html, body, #root {
   border-color: var(--sienna);
   color: var(--sienna);
 }
- 
+
 /* ── Messages ── */
 .messages {
   flex: 1;
@@ -316,20 +372,102 @@ html, body, #root {
   flex-direction: column;
   gap: 0;
 }
- 
+
 .messages::-webkit-scrollbar { width: 4px; }
 .messages::-webkit-scrollbar-thumb { background: var(--sand); }
- 
+
+/* ── Welcome card ── */
+.welcome-card {
+  margin: auto;
+  max-width: 480px;
+  padding: 40px;
+  border: 2px solid var(--charcoal);
+  background: var(--parch);
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+
+.welcome-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  width: 32px;
+  margin: 0 auto 20px;
+}
+
+.welcome-sq {
+  width: 14px;
+  height: 14px;
+  background: var(--charcoal);
+}
+
+.welcome-sq--sand { background: var(--sand); }
+.welcome-sq--moss { background: var(--moss); }
+
+.welcome-title {
+  font-family: "Space Mono", monospace;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  margin-bottom: 8px;
+}
+
+.welcome-sub {
+  font-family: "Space Mono", monospace;
+  font-size: 9px;
+  color: var(--stone);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+
+.welcome-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+.welcome-step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  border-left: 3px solid var(--sienna);
+  background: var(--linen);
+}
+
+.step-num {
+  font-family: "Space Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sienna);
+  flex-shrink: 0;
+}
+
+.step-text {
+  font-size: 12px;
+  color: var(--charcoal);
+}
+
 /* ── Chat rows ── */
 .chat-row {
   display: flex;
   flex-direction: column;
   margin-bottom: 18px;
+  animation: slideUp 0.2s ease;
 }
- 
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .chat-row--user { align-items: flex-end; }
 .chat-row--ai   { align-items: flex-start; }
- 
+
 .role-label {
   font-family: "Space Mono", monospace;
   font-size: 9px;
@@ -338,10 +476,10 @@ html, body, #root {
   text-transform: uppercase;
   margin-bottom: 5px;
 }
- 
+
 .chat-row--user .role-label { color: var(--stone); }
 .chat-row--ai .role-label   { color: var(--sienna); }
- 
+
 /* ── Bubbles ── */
 .bubble {
   padding: 12px 16px;
@@ -350,21 +488,79 @@ html, body, #root {
   line-height: 1.75;
   color: var(--charcoal);
 }
- 
+
 .bubble--user {
   background: var(--parch);
   border: 1px solid var(--sand);
 }
- 
-/* The signature: thick left margin bar — like a pencil annotation */
+
 .bubble--ai {
   background: var(--linen);
   border: 1px solid var(--charcoal);
   border-left: 4px solid var(--sienna);
 }
- 
-.bubble p { margin: 0; white-space: pre-wrap; }
- 
+
+/* ── Answer formatting ── */
+.answer-body { display: flex; flex-direction: column; gap: 4px; }
+
+.answer-list {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.answer-list li {
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.7;
+}
+
+.answer-list li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--sienna);
+  font-size: 10px;
+  top: 3px;
+}
+
+.answer-para {
+  margin: 2px 0;
+  line-height: 1.7;
+}
+
+.answer-heading {
+  display: block;
+  font-family: "Space Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sienna);
+  margin-top: 10px;
+  margin-bottom: 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Loading state ── */
+.loading-state {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.loading-label {
+  font-family: "Space Mono", monospace;
+  font-size: 9px;
+  color: var(--stone);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 /* ── Typing dots ── */
 .typing-dots {
   display: flex;
@@ -372,7 +568,7 @@ html, body, #root {
   gap: 6px;
   padding: 4px 0;
 }
- 
+
 .typing-dots span {
   width: 6px;
   height: 6px;
@@ -380,15 +576,15 @@ html, body, #root {
   display: block;
   animation: bdot 1.3s ease-in-out infinite;
 }
- 
+
 .typing-dots span:nth-child(2) { animation-delay: 0.15s; background: var(--sand); }
 .typing-dots span:nth-child(3) { animation-delay: 0.3s;  background: var(--moss); }
- 
+
 @keyframes bdot {
   0%, 80%, 100% { transform: translateY(0); opacity: 0.35; }
   40%           { transform: translateY(-5px); opacity: 1; }
 }
- 
+
 /* ── Sources ── */
 .sources {
   display: flex;
@@ -399,7 +595,7 @@ html, body, #root {
   padding-top: 8px;
   border-top: 1px solid var(--border);
 }
- 
+
 .sources-label {
   font-family: "Space Mono", monospace;
   font-size: 9px;
@@ -408,15 +604,22 @@ html, body, #root {
   text-transform: uppercase;
   color: var(--stone);
 }
- 
+
 .source-chip {
   font-family: "Space Mono", monospace;
   font-size: 10px;
   color: var(--moss);
   border: 1px solid var(--moss);
   padding: 1px 7px;
+  transition: background 0.1s, color 0.1s;
+  cursor: default;
 }
- 
+
+.source-chip:hover {
+  background: var(--moss);
+  color: var(--linen);
+}
+
 /* ── Input area ── */
 .input-area {
   padding: 14px 22px 18px;
@@ -426,18 +629,18 @@ html, body, #root {
   flex-direction: column;
   gap: 7px;
 }
- 
+
 .input-row {
   display: flex;
   align-items: stretch;
   border: 2px solid var(--charcoal);
   transition: border-color 0.12s;
 }
- 
+
 .input-row:focus-within {
   border-color: var(--sienna);
 }
- 
+
 .chat-input {
   flex: 1;
   padding: 10px 14px;
@@ -452,11 +655,11 @@ html, body, #root {
   max-height: 160px;
   overflow-y: auto;
 }
- 
+
 .chat-input::placeholder { color: var(--stone); }
 .chat-input::-webkit-scrollbar { width: 3px; }
 .chat-input::-webkit-scrollbar-thumb { background: var(--border); }
- 
+
 /* ── Send button ── */
 .send-btn {
   width: 48px;
@@ -471,26 +674,23 @@ html, body, #root {
   flex-shrink: 0;
   transition: background 0.12s, color 0.12s;
 }
- 
+
 .send-btn--active {
   background: var(--sienna);
   color: var(--linen);
 }
- 
-.send-btn--active:hover {
-  background: #8B4420;
-}
- 
+
+.send-btn--active:hover { background: #8B4420; }
 .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
- 
+
 .input-hint {
   font-family: "Space Mono", monospace;
   font-size: 9px;
   color: var(--stone);
   letter-spacing: 0.05em;
 }
- 
-/* ── Spinner (square Bauhaus style) ── */
+
+/* ── Spinner ── */
 .spinner-sq {
   width: 13px;
   height: 13px;
@@ -499,19 +699,19 @@ html, body, #root {
   display: inline-block;
   animation: spin 0.65s linear infinite;
 }
- 
+
 @keyframes spin { to { transform: rotate(360deg); } }
- 
+
 /* ── Scrollbar global ── */
 * { scrollbar-width: thin; scrollbar-color: var(--sand) transparent; }
- 
+
 /* ── Responsive ── */
 @media (max-width: 680px) {
   .sidebar { width: 180px; min-width: 180px; }
   .messages { padding: 14px; }
   .input-area { padding: 12px 14px 16px; }
 }
- 
+
 @media (max-width: 480px) {
   .app { flex-direction: column; border: none; }
   .sidebar {
@@ -529,29 +729,7 @@ html, body, #root {
   .pdf-list, .section-label, .sidebar-foot { display: none; }
   .upload-btn { width: auto; padding: 8px 12px; }
 }
- 
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
-}
- 
-/* ── Formatted answer bullets ── */
-.bubble--ai li {
-  padding: 3px 0 3px 14px;
-  position: relative;
-  line-height: 1.7;
-  white-space: normal;
-}
-
-.bubble--ai li::before {
-  content: "▸";
-  position: absolute;
-  left: 0;
-  color: var(--sienna);
-  font-size: 11px;
-}
-
-.bubble--ai p {
-  margin: 3px 0;
-  line-height: 1.7;
-  white-space: normal;
 }
