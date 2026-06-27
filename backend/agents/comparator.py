@@ -1,25 +1,30 @@
 from agents.llm import llm
 
-def compare_papers(text1, text2):
 
-    prompt = f"""
-Compare these two research papers.
+def compare_papers(docs1: list, docs2: list, name1: str, name2: str) -> str:
+    text1 = "\n".join([d.page_content for d in docs1[:6]])
+    text2 = "\n".join([d.page_content for d in docs2[:6]])
 
-Paper 1:
+    prompt = f"""You are ResearchForge, an expert research analyst.
+
+Compare these two research papers in depth.
+
+Paper 1: {name1}
 {text1}
 
-Paper 2:
+Paper 2: {name2}
 {text2}
 
-Provide:
+Provide a structured comparison:
 
-1. Similarities
-2. Differences
-3. Strengths
-4. Weaknesses
-5. Novel contributions
-"""
+## Objectives
+## Methodology
+## Key Results
+## Strengths & Weaknesses
+## Novel Contributions
+## Which to cite for what
+
+Be specific and cite page numbers where possible."""
 
     response = llm.invoke(prompt)
-
     return response.content
