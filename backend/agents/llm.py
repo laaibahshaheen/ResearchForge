@@ -1,12 +1,11 @@
-from dotenv import load_dotenv
-from langchain_groq import ChatGroq
 import os
+from langchain_groq import ChatGroq
 
-load_dotenv()
-
-groq_key = os.getenv("GROQ_API_KEY")
+# On Railway, env vars are set directly — no .env file needed
+# load_dotenv() is removed to prevent it from overriding Railway variables
+groq_key = os.environ.get("GROQ_API_KEY")
 if not groq_key:
-    raise EnvironmentError("GROQ_API_KEY not found. Add it to backend/.env or Railway Variables.")
+    raise EnvironmentError("GROQ_API_KEY not found in environment variables.")
 
 llm = ChatGroq(
     model="llama-3.3-70b-versatile",
