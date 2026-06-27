@@ -1,4 +1,4 @@
-# ResearchForge 🔬
+# ResearchForge
 
 > An autonomous AI research assistant that reads, compares, and synthesizes scientific papers.
 
