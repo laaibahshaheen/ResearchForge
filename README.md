@@ -58,25 +58,11 @@ Cited Answer / Comparison / Gap Analysis / Lit Review
 | Frontend | React + Vite, Bauhaus earth-tone design |
 | Backend | FastAPI + Python 3.14 |
 | LLM | LLaMA 3.3 70B via Groq (free tier) |
-| Vector DB | ChromaDB with per-PDF collections |
+| Qdrant |  Docker |
 | Embeddings | HuggingFace all-MiniLM-L6-v2 |
 | Framework | LangChain + LangGraph |
 
-## Setup
 
-```bash
-# 1. Backend
-cd backend
-source .venv/bin/activate
-uvicorn main:app --port 8000
-
-# 2. Frontend
-cd frontend
-npm run dev
-```
-
-Add to `backend/.env`:
-## API Endpoints
 
 | Endpoint | Method | Description |
 |---|---|---|
